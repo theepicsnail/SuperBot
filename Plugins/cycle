@@ -1,0 +1,1 @@
+kill -s USR2 `cat /tmp/superbot.pid`

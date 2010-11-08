@@ -1,0 +1,20 @@
+separate plugins into Service and Plugin
+    I don't know exactly how or what distinguishes them
+
+make a usable non-volitile memory for superbot
+
+Be sure to include the following in some way:
+    def getTarget(bot,userline,msg):
+        if msg[0]==bot.nick:
+            return userline.split("!")[0]
+        return msg[0]
+    perhaps do this inside superbot so the plugins don't have to call it
+
+    hasService(serviceName)
+    iSCREEEEEEN $$$$4    
+
+Plugin Tester:
+    creates a console interface that allows you to send messages to a plugin
+    to see what they would output
+
+ 

@@ -1,0 +1,12 @@
+
+def on_load(b):
+    pass
+def on_unload(bot):
+    pass
+def on_PRIVMSG(bot, sender, args):
+    nick, channel, msg = sender.split('!', 1)[0], args[0], args[1]
+    pass
+
+
+
+
