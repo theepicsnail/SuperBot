@@ -1,1 +1,6 @@
-Private/
+~*
+*.pyc
+*.swm
+*.swn
+*.swo
+*.swp
