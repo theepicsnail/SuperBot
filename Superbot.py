@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from twisted.words.protocols import irc
 from twisted.internet import protocol,reactor 
 import sys,traceback,os
@@ -58,12 +59,12 @@ class SuperBot(irc.IRCClient, object):
                 print "[  OK  ]"
             else:
                 print "[FAILED]"
-    def connectionMade(self):
-        super(SuperBot,self).connectionMade();
-        print "Connection made"
+        
+    def signedOn(self):
+        print "Signed on"
         print "Joining default channels:"
         for i in CONFIG["channels"]:
-            print " -%s"%(i,)
+            print " <%s>"%(i,)
             self.join(i)
 
     def handleCommand(self,cmd,prefix,params):
@@ -77,8 +78,11 @@ class SuperBot(irc.IRCClient, object):
             try:
                 if hasattr(sys.modules[i],"on_"+cmd):
                     getattr(sys.modules[i],"on_"+cmd)(self,prefix,params)
-            except:
-                onError()
+            except Exception as E:
+                if hasattr(sys.modules[i],"on_error"):
+                    getattr(sys.modules[i],"on_error")(E)
+                else:
+                    onError()
     
     def ctcpQuery(self,user,chan,mess):
         super(SuperBot,self).ctcpQuery(user,chan,mess)
