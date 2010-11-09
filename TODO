@@ -1,20 +1,42 @@
-separate plugins into Service and Plugin
-    I don't know exactly how or what distinguishes them
-
-make a usable non-volitile memory for superbot
-
-Be sure to include the following in some way:
-    def getTarget(bot,userline,msg):
-        if msg[0]==bot.nick:
-            return userline.split("!")[0]
-        return msg[0]
-    perhaps do this inside superbot so the plugins don't have to call it
-
-    hasService(serviceName)
-    iSCREEEEEEN $$$$4    
-
 Plugin Tester:
-    creates a console interface that allows you to send messages to a plugin
-    to see what they would output
+    Create a way to test plugins without needing to connect to an IRC server
+
+Non-Volitile memory:
+    Create a good system for storing data that doesn't get lost when Superbot
+        restarts.
+    This should allow for plugins to store any values they want
+
+Identify/Login:
+    Create a way for plugins can require a user be logged in/identified to 
+        perform some functionalitiy.
+    Preferbly this should not require Nickserv to also be present
+
+Plugin types:
+    Some plugins are 'more imporant' than others, such as the ability to use
+        irc Colors in text. The PluginManager is also fairly key to Superbot
+    Find a way to make these plugins('service's?) work separately from the 
+        typical plugins, also allow for testing of presence so plugins can
+        respond apropriately. (such as not including color markers if the color
+        plugin is absent)
+
+Plugin interface problems:
+    Currently many plugins need to get the nick, channel, and tell if the
+        message is a private message or in a channel
+    Implementing an easy fix so that this information is there would be nice
+    
+    Thoughts: possibly a decorator that takes the provided input and re-forms
+        it into a better form:
+        
+        @ParamFix
+        def on_PRIVMSG(bot,from,to,message): 
+        
+        where from is the senders nick, to is the channel or the senders nick
+        and message is, of course, the message itself
+
+        def getTarget(bot,userline,msg): #msg[0] is who the message was sent to
+            if msg[0]==bot.nickname:
+                return userline.split("!")[0] #it's a PM
+            return msg[0]   #it's to a channel
+
 
  

@@ -1,6 +1,6 @@
-server	    irc.udderweb.com
+server	    irc.server.com
 port  	    6667
-nick 		superbot  
-plugins 	PluginManager  Logger  Google  Youtube  Fortune  Quote Mathbot SignalHandler ColorFilter Bitly SignalHandler QuotesDB Twitter HackerNews
-channels    #adullam
-pluginDir   /home/uw/superpybot/Plugins
+nick 		Superbot
+plugins 	List Of Plugins To Include
+channels    #chan1 #chan2 #chan3
+pluginDir   /path/to/plugin/directory

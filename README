@@ -1,3 +1,21 @@
-A bot built to lurk the dark waters of udderweb.
+Superbot is an IRC bot that has been designed with expansion and pluggability
+in mind. 
 
-It does stuff
+It's currently on its third revision, the first was in java, the second in 
+python, and the third in python using Twisted as the base. Superbot has a
+plugin system inplace that lets the indivdual plugins control the bot with 
+ease. There is also a safe-guard so that if a plugin crashes, or throws an
+exception the bot will not go down. 
+
+The main two focuses of Superbot are:
+1)Robustness
+    A faulty plugin should not be able to take out the bot
+    Server splits should not be able to take out the bot
+    Network lag and temporary disconnects should not take out the bot
+2)Plugability
+    Any feature desireable should be able to be implemented though the 
+        plugin system
+    The core of superbot should NOT be where the functionality is. The
+        plugins should be the source of content and interaction.
+
+
