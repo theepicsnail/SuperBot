@@ -16,19 +16,22 @@ def on_unload(bot):
 
 def on_NOTICE(bot, sender, args):
     updateTopic(bot)
+
 def updateTopic(bot):
     title=""
     color = 2
+    user_prefix = ""
     for user in db.keys():
         privdb = db[user]
         color = color +1 
         if color == 15:
             color = 3
-        title+=chr(3)+str(color)+"|"+user+" "
+        title+=chr(3)+str(color)+user_prefix+user+" "
         for event in privdb.keys():
             time= str((datetime.now()-privdb[event]).days)
             title+=event+":"+time+" "
 #        title+="]"
+        user_prefix = " | "
     print title
     bot.topic(channel,title)
 
