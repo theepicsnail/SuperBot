@@ -4,3 +4,6 @@
 *.swn
 *.swo
 *.swp
+Config
+.gitignore
+Config
