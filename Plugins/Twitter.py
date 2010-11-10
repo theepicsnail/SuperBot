@@ -1,9 +1,11 @@
 import twitter
 
+twit_password = file("Twitter-private","r").readlines()[0].strip()
 
 def postUpdate(user, update):
-    #hardcoded password sucks! but maybe in the future we can accept pm's with ppls passwords and they can post to twitter from here =)
-    api = twitter.Api(username=user, password='f00adu1')
+    #OLD COMMENT IS OLD - #hardcoded password sucks! but maybe in the future we can accept pm's with ppls passwords and they can post to twitter from here =)
+    # The password is no less hardcoded now, but at least it's in a seperate file.
+    api = twitter.Api(username=user, password=twit_password)
     if api.PostUpdate(update): return True
 
 def getLatestStatus(user):
