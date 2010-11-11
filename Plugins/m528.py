@@ -4,7 +4,7 @@ db = None
 
 prefix="$"
 channel="#test"
-
+lastTopic = ""
 def on_load(b):
     global db
     db = shelve.open("m528.db", writeback=True) #if this causes problems it's not necessary 
@@ -14,10 +14,15 @@ def on_unload(bot):
     db.close()
     pass
 
-def on_NOTICE(bot, sender, args):
-    updateTopic(bot)
+def on_PING(bot, sender, args):
+    curTopic = genTopic()
+    if curTopic != lastTopic:
+        bot.topic(channel, genTopic())
 
 def updateTopic(bot):
+    bot.topic(channel, genTopic())
+
+def genTopic():
     title=""
     color = 2
     user_prefix = ""
@@ -32,8 +37,7 @@ def updateTopic(bot):
             title+=event+":"+time+" "
 #        title+="]"
         user_prefix = " | "
-    print title
-    bot.topic(channel,title)
+    return title
 
 def on_PRIVMSG(bot, sender, args):
     nick, chan, msg = sender.split('!', 1)[0], args[0], args[1]
