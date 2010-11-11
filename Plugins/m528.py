@@ -3,9 +3,9 @@ from datetime import datetime,timedelta
 db = None
 
 prefix="$"
-channel="#test"
+channel="#m528"
 lastTopic = ""
-def on_load(b):
+def on_load(bot):
     global db
     db = shelve.open("m528.db", writeback=True) #if this causes problems it's not necessary 
     pass
@@ -15,12 +15,17 @@ def on_unload(bot):
     pass
 
 def on_PING(bot, sender, args):
+    updateTopic(bot)
+
+def updateTopic(bot):#update the topic if necessary
+    global lastTopic
     curTopic = genTopic()
     if curTopic != lastTopic:
-        bot.topic(channel, genTopic())
-
-def updateTopic(bot):
-    bot.topic(channel, genTopic())
+        print "Topics differ!"
+        print "Currently: "+lastTopic
+        print "New: "+curTopic
+        bot.topic(channel, curTopic)
+        lastTopic = curTopic
 
 def genTopic():
     title=""
@@ -36,7 +41,7 @@ def genTopic():
             time= str((datetime.now()-privdb[event]).days)
             title+=event+":"+time+" "
 #        title+="]"
-        user_prefix = " | "
+        user_prefix = "| "
     return title
 
 def on_PRIVMSG(bot, sender, args):

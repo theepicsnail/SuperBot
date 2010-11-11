@@ -4,6 +4,6 @@
 *.swn
 *.swo
 *.swp
-*private
+*[Pp]rivate
 m528.db
 Config
