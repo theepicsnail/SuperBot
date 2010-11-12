@@ -1,5 +1,6 @@
 
-
+def nickColor(self,nick):#weechat colors
+    return ["{C10}","{C13}","{C3}","{C7}","{B}{C2}","{C0}","{B}{C10}","{B}{C6}","{B}{C3}","{C2}"][sum(map(ord,nick))%10]
 
 def colorFilter(msg):
     msg = msg.encode("utf-8")
@@ -23,6 +24,7 @@ def on_load(bot):
     bot.oldSay=bot.say
     nsay=lambda chan,msg:bot.oldSay(chan,colorFilter(msg))
     setattr(bot,"say",nsay)
+    bot.nickColor = nickColor
     #print "bot.msg:",bot.msg 
 #    bot.oldMsg=bot.msg
 #    nmsg=lambda chan,msg:bot.oldMsg(chan,colorFilter(msg))
