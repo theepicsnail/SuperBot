@@ -5,6 +5,9 @@ db = None
 prefix="$"
 channel="#m528"
 lastTopic = ""
+lastUpdateTime = datetime.now()
+updateFrequency = timedelta(0, 43200) # day, seconds---43200 seconds = 12 hours.
+
 def on_load(bot):
     global db
     db = shelve.open("m528.db", writeback=True) #if this causes problems it's not necessary 
@@ -17,7 +20,9 @@ def on_unload(bot):
     pass
 
 def on_PING(bot, sender, args):
-    updateTopic(bot)
+    global lastUpdateTime, updateFrequency
+    if ( datetime.now() - lastUpdateTime > updateFrequency ):
+        updateTopic(bot)
 
 def updateTopic(bot):#update the topic if necessary
     global lastTopic
