@@ -3,15 +3,17 @@ from datetime import datetime,timedelta
 db = None
 
 prefix="$"
-channel="#test"
+channel="#m528"
 lastTopic = ""
 def on_load(bot):
     global db
     db = shelve.open("m528.db", writeback=True) #if this causes problems it's not necessary 
+    bot.join(channel)
     pass
 
 def on_unload(bot):
     db.close()
+    bot.part(channel)
     pass
 
 def on_PING(bot, sender, args):
