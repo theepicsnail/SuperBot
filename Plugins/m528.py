@@ -23,6 +23,7 @@ def on_PING(bot, sender, args):
     global lastUpdateTime, updateFrequency
     if ( datetime.now() - lastUpdateTime > updateFrequency ):
         updateTopic(bot)
+        lastUpdateTime = datetime.now()
 
 def updateTopic(bot):#update the topic if necessary
     global lastTopic
