@@ -3,7 +3,7 @@ from datetime import datetime,timedelta
 db = None
 
 prefix="$"
-channel="#m528"
+channel="#test"
 lastTopic = ""
 def on_load(bot):
     global db
@@ -57,8 +57,11 @@ def on_PRIVMSG(bot, sender, args):
 
         key = args[0][1:]
         length = None
+        timeDelta = None
         if privdb.has_key(key):
-            length = (datetime.now()-privdb[key]).days
+            timeDelta = datetime.now()-privdb[key]
+            length = timeDelta.days
+            timeDelta = str(timeDelta)
             if length!=1:
                 length = str(length)+" days"
             else:
@@ -67,7 +70,7 @@ def on_PRIVMSG(bot, sender, args):
 
         if len(args)==1:
             if length:
-                bot.say(channel,"Timer reset, length = "+length)
+                bot.say(channel,"Timer reset, length = "+timeDelta)
             else:
                 bot.say(channel,"New timer started! Be strong!")
 
@@ -76,15 +79,18 @@ def on_PRIVMSG(bot, sender, args):
         else:
             if args[1]=="remove":
                 if length:
-                    bot.say(channel,"Timer removed.  length = "+length)
+                    bot.say(channel,"Timer removed.  length = "+timeDelta)
                     del privdb[key]
+                    print privdb,len(privdb)
+                    if len(privdb)==0:
+                        privdb=None
                     update = True
                 else:
                     bot.say(channel,"You never had that timer!")
 
             elif args[1]=="stat":
                 if length:
-                    bot.say(channel,length)
+                    bot.say(channel,timeDelta)
                 else:
                     bot.say(channel,"You never started that timer, use "+prefix+key+" to start it!")
             else:
@@ -95,12 +101,15 @@ def on_PRIVMSG(bot, sender, args):
                         length += "s"
                     td = timedelta(days=d)
                     privdb[key]=datetime.now()-td
-                    bot.say(channel,"Timer reset, length = "+length)
+                    bot.say(channel,"Timer reset, length = "+timeDelta)
                     update = True
                 except:
                     bot.say(channel,"Try: "+prefix+key+" # to set the number of days on your timer")
 
-        db[nick]=privdb
+        if privdb:
+            db[nick]=privdb
+        else:
+            del db[nick]
 
         if update:
             updateTopic(bot)
