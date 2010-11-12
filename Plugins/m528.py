@@ -25,7 +25,7 @@ def updateTopic(bot):#update the topic if necessary
         print "Currently: "+lastTopic
         print "New: "+curTopic
         bot.topic(channel, curTopic)
-        lastTopic = curTopic
+        lastTopic = curTopic #This isn't sticking :(
 
 def genTopic():
     title=""
