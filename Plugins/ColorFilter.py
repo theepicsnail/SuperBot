@@ -18,16 +18,16 @@ def colorFilter(msg):
     return msg
 def on_unload(bot):
     bot.say = bot.oldSay
-    bot.msg = bot.oldMsg
+#    bot.msg = bot.oldMsg
 
 def on_load(bot):
     bot.oldSay=bot.say
-    nsay=lambda chan,msg:bot.oldSay(chan,colorFilter(msg))
+    nsay=lambda chan,msg,len=None:bot.oldSay(chan,colorFilter(msg),len)
     setattr(bot,"say",nsay)
     bot.nickColor = nickColor
     #print "bot.msg:",bot.msg 
     bot.oldMsg=bot.msg
-    nmsg=lambda chan,msg:bot.oldMsg(chan,colorFilter(msg))
+    nmsg=lambda user,message,len=None:bot.oldMsg(user,colorFilter(message),len)
     setattr(bot,"msg",nmsg)
 
 def target(bot,sender,room):
@@ -49,4 +49,5 @@ def on_PRIVMSG(bot,sender,args):
         msg = args[1]
         msg = msg.replace("!repeat ","")
         bot.say(to,msg)
+        bot.msg(to,msg)
 
