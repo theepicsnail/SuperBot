@@ -50,7 +50,8 @@ def handleWeb(data):
             data = unquote_plus(data.rfile.read(l)).split("=")[1]
             jo= json.JSONDecoder().decode(data)
             comm= jo["commits"][0]
-            msg = "{C2}[Commit] {C3}"+comm["author"]["username"]
+            rep = jo["repository"]["name"]
+            msg = "{C2}[Commit:"+rep+"] {C3}"+comm["author"]["username"]
             msg += "{C7} " + comm["message"]
             msg += "{C6} " + comm["timestamp"]
             msg = msg.encode("utf-8")
