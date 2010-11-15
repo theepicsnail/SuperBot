@@ -1,5 +1,5 @@
 
-def nickColor(self,nick):#weechat colors
+def nickColor(nick):#weechat colors
     return ["{C10}","{C13}","{C3}","{C7}","{B}{C2}","{C0}","{B}{C10}","{B}{C6}","{B}{C3}","{C2}"][sum(map(ord,nick))%10]
 
 def colorFilter(msg):
@@ -18,7 +18,7 @@ def colorFilter(msg):
     return msg
 def on_unload(bot):
     bot.say = bot.oldSay
-#    bot.msg = bot.oldMsg
+    bot.msg = bot.oldMsg
 
 def on_load(bot):
     bot.oldSay=bot.say
@@ -26,9 +26,10 @@ def on_load(bot):
     setattr(bot,"say",nsay)
     bot.nickColor = nickColor
     #print "bot.msg:",bot.msg 
-#    bot.oldMsg=bot.msg
-#    nmsg=lambda chan,msg:bot.oldMsg(chan,colorFilter(msg))
-#    setattr(bot,"msg",nmsg)
+    bot.oldMsg=bot.msg
+    nmsg=lambda chan,msg:bot.oldMsg(chan,colorFilter(msg))
+    setattr(bot,"msg",nmsg)
+
 def target(bot,sender,room):
     if type(room)==list:
         room=room[0]
