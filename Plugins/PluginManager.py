@@ -16,8 +16,8 @@ def on_NOTICE(connection, nickLine,params):
     words = params[1].strip().split(" ")
     colorize = connection.hasPlugin("ColorFilter")
     bold = "{B}" if colorize else ""
-    green= "{C}3" if colorize else ""
-    red  = "{C}5" if colorize else ""
+    green= "{C3}" if colorize else ""
+    red  = "{C5}" if colorize else ""
     none = "{C} " if colorize else ""
     pad = lambda x,y:x+(y-len(x))*" "
     try:
@@ -26,9 +26,9 @@ def on_NOTICE(connection, nickLine,params):
                 if words[1]=="load":
                     
                     if bot.loadPlugin(words[2]):
-                        connection.msg(source,"Load plugin: "+bold+words[2]+bold+green+"loaded.")
+                        connection.msg(source,"Load plugin: "+bold+words[2]+bold+green+" loaded.")
                     else:
-                        connection.msg(source,"Failed to load "+words[2]+".")
+                        connection.msg(source,bold+red+"Failed "+none+"to load "+words[2]+".")
                 if words[1]=="unload":
                     if bot.unloadPlugin(words[2]):
                         connection.msg(source,"Plugin "+words[2]+" unloaded.")
