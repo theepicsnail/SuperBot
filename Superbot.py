@@ -136,8 +136,12 @@ class SuperBot(irc.IRCClient, object):
 
             mod = sys.modules[name]
             print "mod =",mod
-            if hasattr(mod,"on_unload"):
-                mod.on_unload(self);
+            try:
+                if hasattr(mod,"on_unload"):
+                    mod.on_unload(self);
+            except:
+                onError()
+            
             print sys.modules[name]
             del sys.modules[name]
 
