@@ -120,6 +120,7 @@ def on_PRIVMSG(bot, sender, args):
             del db[nick]
 
         if update:
+            db.sync() # this will possibly fix superbots amnesia
             updateTopic(bot)
     pass
 
