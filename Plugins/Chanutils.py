@@ -56,3 +56,7 @@ def on_PRIVMSG(bot,sender,msg):
         c = choice(pts)
         print pts, c, msg[0]
         bot.say(msg[0],c)
+    if parts[0][0]=="@":
+        parts = msg[1].split(" ",1)
+        bot.say(parts[0][1:],parts[1])
+
