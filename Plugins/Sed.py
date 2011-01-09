@@ -1,5 +1,5 @@
 import re
-sed = re.compile("^!s(.)(.*?)\\1(.*?)\\1([gi]{0,2})$")
+sed = re.compile("^!s(.)(.*?)\\1(.*?)\\1([gic]{0,2})$")
 msgHistory = [""]*10
 def on_PRIVMSG(bot,sender,msg):
     global sed,msgHistory
@@ -15,6 +15,8 @@ def on_PRIVMSG(bot,sender,msg):
         for i in msgHistory:
             res = search.search(i)
             if res:
+                if flags.find('c')>=0:
+                    replace = "{C3}"+replace+"{}"
                 if flags.find('g')>=0:
                     bot.say(room,search.sub(replace, i, 0))
                 else:
