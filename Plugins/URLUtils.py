@@ -25,4 +25,3 @@ def on_PRIVMSG(bot, sender, args, prefix="!"):
     if res: 
         url = res.groups()[0]
         bot.say(channel, grabTitle(url))
-

@@ -18,10 +18,12 @@ def getAnswer(question):
     response = urllib2.urlopen(request)
     data = response.read()
     try:
-        res = eval(data.split("context.jsonArray.popups.i_0200_1 =")[1].split(";")[0])
-        return res["stringified"]
+        parts = data.split("stringified\": \"")
+        if len(parts)>2:
+            return parts[2].split("\"")[0]
+        return  parts[1].split("\"")[0]
     except:
-        return "Something broke!"
+        raise
 
 def on_PRIVMSG(bot, sender, args): 
     PREFIX = '!'

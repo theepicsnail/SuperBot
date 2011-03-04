@@ -7,6 +7,7 @@ import urllib
 LOGIN = "tsoporan"
 API_KEY = "R_e29b3e8186e3fec26cbb30963dfc3747"
 API_URL = "http://api.bit.ly/v3/shorten?login=%s&apiKey=%s&longUrl=%s&format=txt"
+AUTOLEN=30 #urls longer than this automatically get bb'd
 url = None 
 
 def shorten(url):
@@ -15,7 +16,7 @@ def shorten(url):
     return "{B}Shortened:{B} <{LINK}%s{}>" % data.strip()
 
 def on_PRIVMSG(bot, sender, args):
-    global url 
+    global url, AUTOLEN
     PREFIX = '!'
     nick, channel, args = sender.split('!', 1)[0], args[0], args[1]
 
@@ -23,15 +24,19 @@ def on_PRIVMSG(bot, sender, args):
     res = url_re.search(args)
     if res:
         url = res.groups()[0]
+    else:
+        return 
 
-    if args.startswith(PREFIX) and url:
+
+    if len(url)>AUTOLEN or cmd in ['!bb','!bitly', '!short']:
         try: 
             cmd, msg = args.split(' ', 1)
         except ValueError:
             cmd, msg = args, ""
         
-        if cmd in ['!bb','!bitly', '!short']:
-            bot.say(channel, shorten(url))
+        print AUTOLEN,len(url),url, cmd
+        bot.say(channel, shorten(url))
+
 
 
 

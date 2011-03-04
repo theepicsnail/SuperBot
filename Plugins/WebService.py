@@ -2,6 +2,8 @@ import BaseHTTPServer
 import threading
 import json
 from urllib import unquote_plus
+from Bitly import shorten
+
 running = True
 bot = None
 channel="#adullam"
@@ -36,7 +38,7 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler ):
 class WebThread (threading.Thread):
     def run(self):
         global running
-        server = BaseHTTPServer.HTTPServer(('',8000),Handler)
+        server = BaseHTTPServer.HTTPServer(('',8080),Handler)
         while running:
             server.handle_request()
             print running
@@ -51,7 +53,9 @@ def handleWeb(data):
             jo= json.JSONDecoder().decode(data)
             comm= jo["commits"][0]
             rep = jo["repository"]["name"]
-            msg = "{C2}[Commit:"+rep+"] {C3}"+comm["author"]["username"]
+            ref = jo["ref"]
+            url = comm["url"]
+            msg = "{C2}[Commit:"+rep+" "+ref+"] {C3}"+comm["author"]["username"]
             msg += "{C7} " + comm["message"]
             msg += "{C6} " + comm["timestamp"]
             msg = msg.encode("utf-8")
@@ -62,6 +66,7 @@ def handleWeb(data):
             print "Message:",msg
             
             bot.say(channel,msg)
+            bot.say(channel, shorten(url))
             bot.transport.doWrite() #this is in a different thread i guess?
     except:
         raise

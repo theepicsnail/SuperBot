@@ -1,4 +1,4 @@
-
+import random
 def nickColor(nick):#weechat colors
     return ["{C10}","{C13}","{C3}","{C7}","{B}{C2}","{C0}","{B}{C10}","{B}{C6}","{B}{C3}","{C2}"][sum(map(ord,nick))%10]
 
@@ -18,7 +18,7 @@ def colorFilter(msg):
     return msg
 def on_unload(bot):
     bot.say = bot.oldSay
-#    bot.msg = bot.oldMsg
+    bot.msg = bot.oldMsg
 
 def on_load(bot):
     bot.oldSay=bot.say
@@ -48,6 +48,12 @@ def on_PRIVMSG(bot,sender,args):
     if args[1].startswith("!repeat "):
         msg = args[1]
         msg = msg.replace("!repeat ","")
-        bot.say(to,msg)
         bot.msg(to,msg)
 
+    if args[1].startswith("!gayify "):
+        msg = args[1]
+        msg = msg[8:]
+        out = ""
+        for c in msg:
+            out += "{C"+str(random.randint(2,13))+"}"+c
+        bot.msg(to,out)

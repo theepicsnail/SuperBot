@@ -9,7 +9,6 @@ def log2db(nick, message, channel, type):
     """
         Simple log to a mysql DB. 
     """
-    print "asdkjghafkhjafkjdhaf"
     print LoggerInfo.host
     
     CONNECTION = MySQLdb.connect(
