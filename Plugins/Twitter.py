@@ -26,7 +26,7 @@ def on_PRIVMSG(bot, sender, args):
             cmd, msg = args.split(' ', 1)  
         except ValueError:
             cmd, msg = args, ""
-        if cmd == '!tweet' and msg:
+        if cmd == '!t' and msg:
             try:
                 if postUpdate(msg): bot.say(channel, "Update posted.")
             except Exception:
