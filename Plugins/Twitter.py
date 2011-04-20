@@ -7,7 +7,7 @@ import tweepy
 #ACCESS_KEY=''
 #ACCESS_SECRET=''
 
-execfile("Twitter.cfg")
+execfile("Plugins/Twitter.cfg")
 
 def postUpdate(update):
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -31,3 +31,10 @@ def on_PRIVMSG(bot, sender, args):
                 if postUpdate(msg): bot.say(channel, "Update posted.")
             except Exception:
                 print Exception
+
+def on_TOPIC(bot,sender,args):
+    channel = args[0]
+    topic = args[1]
+    if postUpdate("Topic: %s"%(topic)):
+        bot.say(channel,"Update posted")
+
