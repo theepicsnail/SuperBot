@@ -114,9 +114,9 @@ def google_weather(params):
     hi_color = 3
     humidity = float(humidity.strip('Humdity: %'))
     temp_f = float(temp_f)
-    heat_index_f = round(-42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2)
-    heat_index_c = int((heat_index_f - 32) * (5.0 / 9.0))
-    heat_index_f = int(heat_index_f)
+    heat_index_f = -42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2
+    heat_index_c = int(round((heat_index_f - 32) * (5.0 / 9.0)))
+    heat_index_f = int(round(heat_index_f))
     temp_f = int(temp_f)
     humidity = 'Humidity: {0}%'.format(int(humidity))
     if float(temp_f) < 45:
