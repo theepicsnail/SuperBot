@@ -121,13 +121,13 @@ def google_weather(params):
     humidity = 'Humidity: {0}%'.format(int(humidity))
     if float(temp_f) < 45:
         temp_color = 10
-    if float(temp_f) > 65:
+    if float(temp_f) > 75:
         temp_color = 4
     if float(heat_index_f) < 45:
         hi_color = 10
-    if float(heat_index_f) > 65:
+    if float(heat_index_f) > 75:
         hi_color = 4
-    weather_string = "<{C3}Google Weather{}: City: %s | Temp: {C%i}%sc/%sf{} | %s | Heat index: {C%i}%sc/%sf{} | %s | Current Condition: %s>" % \
+    weather_string = "<{C3}Google Weather{}: City: %s | Temp: {C%i}%sc/%sf{} | %s | Heat Index: {C%i}%sc/%sf{} | %s | Current Condition: %s>" % \
                                                         (city, temp_color,temp_c, temp_f, humidity, hi_color, heat_index_c, heat_index_f, wind_condition, condition)
     return weather_string.encode('ascii')
 def google_forecast(params):
