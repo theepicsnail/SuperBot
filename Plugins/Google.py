@@ -111,12 +111,19 @@ def google_weather(params):
     condition = weather_data['current_conditions']['condition']
     city = weather_data['forecast_information']['city']
     temp_color = 3
+    humidity = float(humidity.strip('Humdity: %'))
+    temp_f = float(temp_f)
+    heat_index_f = round(-42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2)
+    heat_index_c = int((heat_index_f - 32) * (5 / 9))
+    heat_index_f = int(heat_index_f)
+    temp_f = int(temp_f)
+    humidity = 'Humidity: {0}%'.format(int(humidity))
     if float(temp_f) < 45:
         temp_color = 10
     if float(temp_f) > 65:
         temp_color = 4
-    weather_string = "<{C3}Google Weather{}: City: %s | Temp: {C%i}%sc/%sf{} | %s | %s | Current Condition: %s>" % \
-                                                        (city, temp_color,temp_c, temp_f, humidity, wind_condition, condition)
+    weather_string = "<{C3}Google Weather{}: City: %s | Temp: {C%i}%sc/%sf{} | %s | Heat index: %sc/%sf | %s | Current Condition: %s>" % \
+                                                        (city, temp_color,temp_c, temp_f, humidity, heat_index_c, heat_index_f, wind_condition, condition)
     return weather_string.encode('ascii')
 def google_forecast(params):
     """Basically the same as google_weather but returns the forcast instead of just today"""
