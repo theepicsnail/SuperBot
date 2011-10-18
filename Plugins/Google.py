@@ -21,7 +21,7 @@ def _buildResponse(url, is_json=False):
     if is_json:
         response = simplejson.load(response)
         if not response.has_key('responseData'): return #no data pointless
-        return response['responseData'] 
+        return response['responseData']
     return response
 
 def google_search(params):
@@ -103,7 +103,7 @@ def google_weather(params):
             except IndexError:
                 pass
         weather_data[tag] = tmp_conditions
-    
+
     temp_c = weather_data['current_conditions']['temp_c']
     temp_f = weather_data['current_conditions']['temp_f']
     humidity = weather_data['current_conditions']['humidity']
@@ -114,7 +114,14 @@ def google_weather(params):
     hi_color = 3
     humidity = float(humidity.strip('Humdity: %'))
     temp_f = float(temp_f)
-    heat_index_f = -42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2
+    if temp_f < 40:
+        heat_index_f = temp_f
+        else:
+            heat_index_low = ((61 + ((temp_f - 68) * 1.2) + (humidity * 0.094)) + temp_f) / 2
+            if heat_index_low < 79:
+                heat_index_f = heat_index_low
+            else:
+                heat_index_f = -42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2
     heat_index_c = int(round((heat_index_f - 32) * (5.0 / 9.0)))
     heat_index_f = int(round(heat_index_f))
     temp_f = int(temp_f)
@@ -132,7 +139,7 @@ def google_weather(params):
     return weather_string.encode('ascii')
 def google_forecast(params):
     """Basically the same as google_weather but returns the forcast instead of just today"""
-    url = GOOGLE_WEATHER_URL+urllib.urlencode(params)    
+    url = GOOGLE_WEATHER_URL+urllib.urlencode(params)
     response = _buildResponse(url).read()
     forecast = minidom.parseString(response).getElementsByTagName('forecast_conditions')
     #dom should be 4 elements (tommorow, +2, +3, +4) tue-fri if todays' monday
@@ -148,10 +155,10 @@ def google_forecast(params):
         output += " {C5}"+day["high"]
         output += " {C10}"+day["condition"]
     return "<{C3}Forcast {C11}| "+output+" {}>"
-def on_PRIVMSG(bot, sender, args): 
+def on_PRIVMSG(bot, sender, args):
     PREFIX = '!'
     nick, channel, args = sender.split('!', 1)[0], args[0], args[1]
-    
+
     if args.startswith(PREFIX):
         try:
             cmd, msg = args.split(' ', 1)
@@ -182,5 +189,5 @@ def on_PRIVMSG(bot, sender, args):
                 bot.say(channel, google_spell(query))
         except ValueError:
             cmd, msg = "", ""
-            
+
 
