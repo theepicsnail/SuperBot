@@ -34,7 +34,7 @@ def google_search(params):
     if not response.has_key('results'): return #no results pointless
     results = response['results']
     result = results[0]
-    searchstring = "<{C3}Google Search{}: {B}%s{} | {LINK}%s{}>" % (result['titleNoFormatting'], urllib.unquote(result['url']))
+    searchstring = "<{C3}Google Search{}: {B}%s{} | {LINK}%s{} >" % (result['titleNoFormatting'], urllib.unquote(result['url']))
     return searchstring
 
 def google_calc(params):
