@@ -6,7 +6,7 @@ def on_unload(bot):
     pass
 
 
-rep = [ ("<3", "{C4}<3{}") ]
+rep = [ ("<3", "{C4}<3{}"), ("LOD", "-_-") ]
 
 
 def on_PRIVMSG(bot, sender, args):
@@ -17,6 +17,7 @@ def on_PRIVMSG(bot, sender, args):
     for i in rep:
         msg = msg.replace(*i)
     if msg != start:
+        
         bot.say(channel,msg)
     pass
 
