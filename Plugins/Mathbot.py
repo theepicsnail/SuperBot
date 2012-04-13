@@ -221,8 +221,9 @@ if IMPORT_MATH:
    addBuiltinFunction("log10",math.log10,1)
    addBuiltinFunction("log1p",math.log1p,1)
    addBuiltinFunction("modf",math.modf,1)
+   addBuiltinFunction("mod",lambda x,y:x%y,2)
    addBuiltinFunction("pow",math.pow,2)
-   addBuiltinFunction("powmod",math.pow,3)
+   addBuiltinFunction("powmod",pow,3)
    addBuiltinFunction("radians",math.radians,1)
    addBuiltinFunction("sin",math.sin,1)
    addBuiltinFunction("sinh",math.sinh,1)
@@ -307,5 +308,5 @@ def on_PRIVMSG(bot,sender,args):
         line=line[1:]
         out = handleLine(line)
         print "Say:",sender[0],out
-        bot.say(args[0],str(out))
+        bot.say(args[0],sender.split('!')[0]+': '+str(out)) # - n0c wuz heer. :B
         

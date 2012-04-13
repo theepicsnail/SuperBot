@@ -2,6 +2,9 @@
 Google plugin for Superbot.
 This plugin handles functionality pertaining to google such as
 google search, and google weather.
+
+It also doesn't work in places, due to Google changing their search functions. They have an API:
+https://code.google.com/apis/customsearch/v1/overview.html
 """
 
 import urllib2, urllib
@@ -34,7 +37,7 @@ def google_search(params):
     if not response.has_key('results'): return #no results pointless
     results = response['results']
     result = results[0]
-    searchstring = "<{C3}Google Search{}: {B}%s{} | {LINK}%s{} >" % (result['titleNoFormatting'], urllib.unquote(result['url']))
+    searchstring = "<{C3}Google Search{}: {B}%s{} | {LINK}%s {}>" % (result['titleNoFormatting'], urllib.unquote(result['url']))
     return searchstring
 
 def google_calc(params):
@@ -54,16 +57,22 @@ def google_define(params, num=None):
         Returns google definition for query.
         @params (dict) contains query value.
     """
-    url = GOOGLE_SEARCH_URL + urllib.urlencode(params)
-    response = _buildResponse(url)
-    html = response.read()
-    pdoc = lxml.html.fromstring(html)
-    results = pdoc.body.cssselect('ul.std li')
-    result = results[num].text.strip()
-    link = "No link."
     try:
-        link =  'http://' + pdoc.body.cssselect('ul.std li a')[num].text_content()
-    except IndexError: pass
+        url = GOOGLE_SEARCH_URL + urllib.urlencode(params)
+        response = _buildResponse(url)
+        html = response.read()
+        pdoc = lxml.html.fromstring(html)
+        results = pdoc.body.cssselect('ul.std li')
+        result = results[num].text.strip()
+        link = "No link."
+        try:
+            link =  'http://' + pdoc.body.cssselect('ul.std li a')[num].text_content()
+        except IndexError as error:
+            return "<{C5}ERROR{}: Google Define failed: %s" % (error)
+            pass
+    except:
+        return "<{C5}ERROR{}: Unknown error in Google Define.>"
+
     return "<{C3}Google Define{}: %s | {LINK}%s{} [{B}%s{} of %s]>" % (result, link, num, len(results)-1)
 
 def google_spell(params):
@@ -116,12 +125,12 @@ def google_weather(params):
     temp_f = float(temp_f)
     if temp_f < 40:
         heat_index_f = temp_f
+    else:
+        heat_index_low = ((61 + ((temp_f - 68) * 1.2) + (humidity * 0.094)) + temp_f) / 2
+        if heat_index_low < 79:
+            heat_index_f = heat_index_low
         else:
-            heat_index_low = ((61 + ((temp_f - 68) * 1.2) + (humidity * 0.094)) + temp_f) / 2
-            if heat_index_low < 79:
-                heat_index_f = heat_index_low
-            else:
-                heat_index_f = -42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2
+            heat_index_f = -42.379 + 2.04901523 * temp_f + 10.14333127 * humidity + -0.22475541 * temp_f * humidity + -6.83783e-3 * temp_f**2 + -5.481717e-2 * humidity**2 + 1.22874e-3 * temp_f**2 * humidity + 8.5282e-4 * temp_f * humidity**2 + -1.99e-6 * temp_f**2 * humidity**2
     heat_index_c = int(round((heat_index_f - 32) * (5.0 / 9.0)))
     heat_index_f = int(round(heat_index_f))
     temp_f = int(temp_f)

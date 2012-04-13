@@ -6,7 +6,7 @@ import tweepy
 #CONSUMER_SECRET=''
 #ACCESS_KEY=''
 #ACCESS_SECRET=''
-
+#Channels=['#foo']
 execfile("Plugins/Twitter.cfg")
 
 def postUpdate(update):
@@ -33,8 +33,12 @@ def on_PRIVMSG(bot, sender, args):
                 print Exception
 
 def on_TOPIC(bot,sender,args):
+    global Channels
     channel = args[0]
     topic = args[1]
-    if postUpdate("Topic: %s"%(topic)):
-        bot.say(channel,"Update posted")
+    if channel in Channels:
+        if postUpdate("Topic: %s"%(topic)):
+            bot.say(channel,"Update posted")
+        else:
+            bot.say(channel,"Update failed")
 

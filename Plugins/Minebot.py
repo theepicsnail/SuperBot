@@ -5,12 +5,41 @@ import socket
 import thread
 from time import sleep
 
+items = [['0', 'Air'], ['1', 'Stone'], ['2', 'Grass'], ['3', 'Dirt'], ['4', 'Cobblestone'], ['5', 'Wooden Plank'], ['6', 'Sapling'], ['6:1', 'Redwood Sapling'], ['6:2', 'Birch Sapling'], 
+        ['7', 'Bedrock'], ['8', 'Water'], ['9', 'Stationary Water'], ['10', 'Lava'], ['11', 'Stationary Lava'], ['12', 'Sand'], ['13', 'Gravel'], ['14', 'Gold Ore'], ['15', 'Iron Ore'], 
+        ['16', 'Coal Ore'], ['17', 'Wood'], ['17:1', 'Redwood'], ['17:2', 'Birchwood'], ['18', 'Leaves'], ['18:1', 'Redwood Leaves'], ['18:2', 'Birchwood Leaves'], ['19', 'Sponge'], ['20', 'Glass'],
+        ['21', 'Lapis Lazuli Ore'], ['22', 'Lapis Lazuli Block'], ['23', 'Dispenser'], ['24', 'Sandstone'], ['25', 'Note Block'], ['26', 'Bed Block'], ['27', 'Powered Rail'], ['28', 'Detector Rail'],
+        ['29', 'Sticky Piston'], ['30', 'Web'], ['31', 'Dead Shrub'], ['31:1', 'Tall Grass'], ['31:2', 'Live Shrub'], ['32', 'Dead Shrub'], ['33', 'Piston'], ['34', 'Piston Head'], 
+        ['35', 'White Wool'], ['35:1', 'Orange Wool'], ['35:2', 'Magenta Wool'], ['35:3', 'Light Blue Wool'], ['35:4', 'Yellow Wool'], ['35:5', 'Light Green Wool'], ['35:6', 'Pink Wool'], 
+        ['35:7', 'Gray Wool'], ['35:8', 'Light Gray Wool'], ['35:9', 'Cyan Wool'], ['35:10', 'Purple Wool'], ['35:11', 'Blue Wool'], ['35:12', 'Brown Wool'], ['35:13', 'Dark Green Wool'], 
+        ['35:14', 'Red Wool'], ['35:15', 'Black Wool'], ['37', 'Yellow Flower'], ['38', 'Red Rose'], ['39', 'Brown Mushroom'], ['40', 'Red Mushroom'], ['41', 'Gold Block'], ['42', 'Iron Block'], 
+        ['43', 'Double Stone Slab'], ['43:1', 'Double Sandstone Slab'], ['43:2', 'Double Wooden Slab'], ['43:3', 'Double Cobblestone Slab'], ['44', 'Stone Slab'], ['44:1', 'Sandstone Slab'], 
+        ['44:2', 'Wooden Slab'], ['44:3', 'Cobblestone Slab'], ['45', 'Brick'], ['46', 'TNT'], ['47', 'Bookshelf'], ['48', 'Mossy Cobblestone'], ['49', 'Obsidian'], ['50', 'Torch'], ['51', 'Fire'], 
+        ['52', 'Monster Spawner'], ['53', 'Wooden Stairs'], ['54', 'Chest'], ['55', 'Redstone Wire'], ['56', 'Diamond Ore'], ['57', 'Diamond Block'], ['58', 'Workbench'], ['59', 'Crops'], 
+        ['60', 'Soil'], ['61', 'Furnace'], ['62', 'Burning Furnace'], ['63', 'Sign Post'], ['64', 'Wooden Door'], ['65', 'Ladder'], ['66', 'Rails'], ['67', 'Cobblestone Stairs'], ['68', 'Wall Sign'],
+        ['69', 'Lever'], ['70', 'Stone Pressure Plate'], ['71', 'Iron Door'], ['72', 'Wooden Pressure Plate'], ['73', 'Redstone Ore'], ['74', 'Glowing Redstone Ore'], ['75', 'Redstone Torch (off)'],
+        ['76', 'Redstone Torch (on)'], ['77', 'Stone Button'], ['78', 'Snow'], ['79', 'Ice'], ['80', 'Snow Block'], ['81', 'Cactus'], ['82', 'Clay'], ['83', 'Sugar Cane'], ['84', 'Jukebox'],
+        ['85', 'Fence'], ['86', 'Pumpkin'], ['87', 'Netherrack'], ['88', 'Soul Sand'], ['89', 'Glowstone'], ['90', 'Portal'], ['91', 'Jack-O-Lantern'], ['92', 'Cake Block'], 
+        ['93', 'Redstone Repeater Block (off)'], ['94', 'Redstone Repeater Block (on)'], ['95', 'Locked Chest'], ['96', 'Trapdoor'], ['256', 'Iron Shovel'], ['257', 'Iron Pickaxe'], 
+        ['258', 'Iron Axe'], ['259', 'Flint and Steel'], ['260', 'Apple'], ['261', 'Bow'], ['262', 'Arrow'], ['263', 'Coal'], ['263:1', 'Charcoal'], ['264', 'Diamond'], ['265', 'Iron Ingot'], 
+        ['266', 'Gold Ingot'], ['267', 'Iron Sword'], ['268', 'Wooden Sword'], ['269', 'Wooden Shovel'], ['270', 'Wooden Pickaxe'], ['271', 'Wooden Axe'], ['272', 'Stone Sword'], 
+        ['273', 'Stone Shovel'], ['274', 'Stone Pickaxe'], ['275', 'Stone Axe'], ['276', 'Diamond Sword'], ['277', 'Diamond Shovel'], ['278', 'Diamond Pickaxe'], ['279', 'Diamond Axe'], 
+        ['280', 'Stick'], ['281', 'Bowl'], ['282', 'Mushroom Soup'], ['283', 'Gold Sword'], ['284', 'Gold Shovel'], ['285', 'Gold Pickaxe'], ['286', 'Gold Axe'], ['287', 'String'], 
+        ['288', 'Feather'], ['289', 'Sulphur'], ['290', 'Wooden Hoe'], ['291', 'Stone Hoe'], ['292', 'Iron Hoe'], ['293', 'Diamond Hoe'], ['294', 'Gold Hoe'], ['295', 'Seeds'], ['296', 'Wheat'], 
+        ['297', 'Bread'], ['298', 'Leather Helmet'], ['299', 'Leather Chestplate'], ['300', 'Leather Leggings'], ['301', 'Leather Boots'], ['302', 'Chainmail Helmet'], 
+        ['303', 'Chainmail Chestplate'], ['304', 'Chainmail Leggings'], ['305', 'Chainmail Boots'], ['306', 'Iron Helmet'], ['307', 'Iron Chestplate'], ['308', 'Iron Leggings'], 
+        ['309', 'Iron Boots'], ['310', 'Diamond Helmet'], ['311', 'Diamond Chestplate'], ['312', 'Diamond Leggings'], ['313', 'Diamond Boots'], ['314', 'Gold Helmet'], ['315', 'Gold Chestplate'], 
+        ['316', 'Gold Leggings'], ['317', 'Gold Boots'], ['318', 'Flint'], ['319', 'Raw Porkchop'], ['320', 'Cooked Porkchop'], ['321', 'Painting'], ['322', 'Golden Apple'], ['323', 'Sign'], 
+        ['324', 'Wooden Door'], ['325', 'Bucket'], ['326', 'Water Bucket'], ['327', 'Lava Bucket'], ['328', 'Minecart'], ['329', 'Saddle'], ['330', 'Iron Door'], ['331', 'Redstone'], 
+        ['332', 'Snowball'], ['333', 'Boat'], ['334', 'Leather'], ['335', 'Milk Bucket'], ['336', 'Clay Brick'], ['337', 'Clay Balls'], ['338', 'Sugarcane'], ['339', 'Paper'], ['340', 'Book'], 
+        ['341', 'Slimeball'], ['342', 'Storage Minecart'], ['343', 'Powered Minecart'], ['344', 'Egg'], ['345', 'Compass'], ['346', 'Fishing Rod'], ['347', 'Clock'], ['348', 'Glowstone Dust'], 
+        ['349', 'Raw Fish'], ['350', 'Cooked Fish'], ['351', 'Ink Sack'], ['351:1', 'Rose Red'], ['351:2', 'Cactus Green'], ['351:3', 'Coco Beans'], ['351:4', 'Lapis Lazuli'], 
+        ['351:5', 'Purple Dye'], ['351:6', 'Cyan Dye'], ['351:7', 'Light Gray Dye'], ['351:8', 'Gray Dye'], ['351:9', 'Pink Dye'], ['351:10', 'Lime Dye'], ['351:11', 'Dandelion Yellow'], 
+        ['351:12', 'Light Blue Dye'], ['351:13', 'Magenta Dye'], ['351:14', 'Orange Dye'], ['351:15', 'Bone Meal'], ['352', 'Bone'], ['353', 'Sugar'], ['354', 'Cake'], ['355', 'Bed'], 
+        ['356', 'Redstone Repeater'], ['357', 'Cookie'], ['358', 'Map'], ['359', 'Shears'], ['2256', 'Gold Music Disc'], ['2257', 'Green Music Disc']]
 
-items = [[0, 'air'], [1, 'stone'], [2, 'grass'], [3, 'dirt'], [4, 'cobblestone'], [5, 'wood'], [6, 'sapling'], [7, 'bedrock'], [8, 'water'], [9, 'stationary', 'water'], [10, 'lava'], [11, 'stationary', 'lava'], [12, 'sand'], [13, 'gravel'], [14, 'gold', 'ore'], [15, 'iron', 'ore'], [16, 'coal', 'ore'], [17, 'log'], [18, 'leaves'], [19, 'sponge'], [20, 'glass'], [21, 'red', 'cloth'], [22, 'orange', 'cloth'], [23, 'yellow', 'cloth'], [24, 'lime', 'cloth'], [25, 'green', 'cloth'], [26, 'aqua', 'green', 'cloth'], [27, 'cyan', 'cloth'], [28, 'blue', 'cloth'], [29, 'purple', 'cloth'], [30, 'indigo', 'cloth'], [31, 'violet', 'cloth'], [32, 'magenta', 'cloth'], [33, 'pink', 'cloth'], [34, 'black', 'cloth'], [35, 'gray', 'cloth', '/', 'white', 'cloth'], [36, 'white', 'cloth'], [37, 'yellow', 'flower'], [38, 'red', 'rose'], [39, 'brown', 'mushroom'], [40, 'red', 'mushroom'], [41, 'gold', 'block'], [42, 'iron', 'block'], [43, 'double', 'step'], [44, 'step'], [45, 'brick'], [46, 'tnt'], [47, 'bookshelf'], [48, 'mossy', 'cobblestone'], [49, 'obsidian'], [50, 'torch'], [51, 'fire'], [52, 'mob', 'spawner'], [53, 'wooden', 'stairs'], [54, 'chest'], [55, 'redstone', 'wire'], [56, 'diamond', 'ore'], [57, 'diamond', 'block'], [58, 'workbench'], [59, 'crops'],
-[60, 'soil'], [61, 'furnace'], [62, 'burning', 'furnace'], [63, 'sign', 'post'], [64, 'wooden', 'door'], [65, 'ladder'], [66, 'minecart', 'tracks'], [67, 'cobblestone', 'stairs'], [68, 'wall', 'sign'], [69, 'lever'], [70, 'stone', 'pressure', 'plate'], [71, 'iron', 'door'], [72, 'wooden', 'pressure', 'plate'], [73, 'redstone', 'ore'], [74, 'glowing', 'redstone', 'ore'], [75, 'redstone', 'torch', '("off"', 'state)'], [76, 'redstone', 'torch', '("on"', 'state)'], [77, 'stone', 'button'], [78, 'snow'], [79, 'ice'], [80, 'snow', 'block'], [81, 'cactus'], [82, 'clay'], [83, 'reed'], [84, 'jukebox'], [85, 'fence'], [256, 'iron', 'spade'], [257, 'iron', 'pickaxe'], [258, 'iron', 'axe'], [259, 'flint', 'and', 'steel'], [260, 'apple'], [261, 'bow'], [262, 'arrow'], [263, 'coal'], [264, 'diamond'], [265, 'iron', 'ingot'], [266, 'gold', 'ingot'], [267, 'iron', 'sword'], [268, 'wooden', 'sword'], [269, 'wooden', 'spade'], [270, 'wooden', 'pickaxe'], [271, 'wooden', 'axe'], [272, 'stone', 'sword'], [273, 'stone', 'spade'], [274, 'stone', 'pickaxe'], [275, 'stone', 'axe'], [276, 'diamond', 'sword'], [277, 'diamond', 'spade'], [278, 'diamond', 'pickaxe'], [279, 'diamond', 'axe'], [280, 'stick'], [281, 'bowl'], [282, 'mushroom', 'soup'], [283, 'gold', 'sword'], [284, 'gold', 'spade'], [285, 'gold', 'pickaxe'], [286, 'gold', 'axe'], [287, 'string'], [288, 'feather'], [289, 'gunpowder'],
-[290, 'wooden', 'hoe'], [291, 'stone', 'hoe'], [292, 'iron', 'hoe'], [293, 'diamond', 'hoe'], [294, 'gold', 'hoe'], [295, 'seeds'], [296, 'wheat'], [297, 'bread'], [298, 'leather', 'helmet'], [299, 'leather', 'chestplate'], [300, 'leather', 'pants'], [301, 'leather', 'boots'], [302, 'chainmail', 'helmet'], [303, 'chainmail', 'chestplate'], [304, 'chainmail', 'pants'], [305, 'chainmail', 'boots'], [306, 'iron', 'helmet'], [307, 'iron', 'chestplate'], [308, 'iron', 'pants'], [309, 'iron', 'boots'], [310, 'diamond', 'helmet'], [311, 'diamond', 'chestplate'], [312, 'diamond', 'pants'], [313, 'diamond', 'boots'], [314, 'gold', 'helmet'], [315, 'gold', 'chestplate'], [316, 'gold', 'pants'], [317, 'gold', 'boots'], [318, 'flint'], [319, 'pork'], [320, 'grilled', 'pork'], [321, 'paintings'], [322, 'golden', 'apple'], [323, 'sign'], [324, 'wooden', 'door'], [325, 'bucket'], [326, 'water', 'bucket'], [327, 'lava', 'bucket'], [328, 'mine', 'cart'], [329, 'saddle'], [330, 'iron', 'door'], [331, 'redstone'], [332, 'snowball'], [333, 'boat'], [334, 'leather'], [335, 'milk', 'bucket'], [336, 'clay', 'brick'], [337, 'clay', 'balls'], [338, 'reed'], [339, 'paper'], [340, 'book'], [341, 'slime', 'ball'], [342, 'storage', 'minecart'], [343, 'powered', 'minecart'], [344, 'egg'], [345, 'compass'], [346, 'fishing', 'rod'], [2256, 'gold', 'record'], [2257, 'green', 'record']]
 
-
+items = map(lambda x:[x[0],x[1].lower()],items)
 
 def search(name):
     name = name.lower()
@@ -23,11 +52,34 @@ def search(name):
     sres = filter(exact,items)
     if sres or len(res)==1:
         toMinecraft("ID: "+str(res[0]))
+        return res[0][0]
     if len(res) > 1:
         lst = ", ".join(map(lambda x:" ".join(x[1:]),res))
 
         toMinecraft("Multiple matches: "+lst)
-    
+        return None
+def give(player,name,quant=1):
+    try:
+        print "give",player,name,quant
+        num = None
+        try:
+            num = int(name)
+        except:
+            num = search(name)
+        print num
+
+        if num == None:
+            raise Exception()
+
+        qnt = int(quant)
+        print qnt
+        global mc
+        while qnt>0:
+            mc.send("give %s %s %s\n"%(player,num,qnt))
+            qnt -= 64
+
+    except:
+        toMinecraft("Give failed.")
 
 
 
@@ -41,23 +93,42 @@ def on_load(b):
     global bot,mc,running
     bot = b
     mc = socket.socket()  
-    bot.say("#adullam","Connecting to minecraft") 
+#    bot.say("#adullam","Connecting to minecraft") 
     try:
         mc.connect(("gene.indstate.edu",10240))
         running = True
-        bot.say("#adullam","Connected!")
+#        bot.say("#adullam","Connected!")
         toMinecraft("Plugin activated")
         thread.start_new_thread(mcThread,(None,))
     except e:
         bot.say("#adullam","Failed to connect")
         raise e
-
+def Lookup(shorthand):
+    print "Lookup:",shorthand
+    mc.send("list\n")
+    resp = mc.recv(1024)
+    if "Connected players:" not in resp:
+        toMinecraft("Something strange happend...")
+        toMinecraft(resp)
+        return shorthand
+    players = resp.split("players:")[1].replace(",","").split()
+    matches = filter(lambda x:shorthand in x, players)
+    if len(matches)==1:
+        return matches[0]
+    if len(matches)>1:
+        toMinecraft("Matches: %r"%matches)
+    if len(matches)==0:
+        toMinecraft("No matches.")
+    return shorthand
+        
+def TP(src,dst):
+    mc.send("tp {} {}\n".format(src,dst))
 def mcThread(args):
     global running,mc,bot
     buffer = ""
     
     while running:
-        tmp = mc.recv(1)
+        tmp = mc.recv(100)
         buffer += tmp
         if not tmp or buffer.count("\n")==0:
             continue
@@ -70,12 +141,35 @@ def mcThread(args):
             msg = g[1]
             if toAdullam:
                 msg=g[1][2:]
+            
+            tp = re.match("!tp (.*) (.*)$",msg)
+            if tp:
+                TP(Lookup(tp.groups()[0]),Lookup(tp.groups()[1]))
+                continue
+
+            tp = re.match("!tp (.*)$",msg)
+            if tp:
+                TP(g[0],Lookup(tp.groups()[0]))
+                continue
+                
+            cheats = """
             id = re.match("!id (.*)",msg)
             if id:
                 search(id.groups()[0])
                 continue
-#            give = re.match("!give (.*) (.*)")
+            gi = re.match("!give (.*) (.*)",msg)
+            if gi:
+                give(g[0],*gi.groups())
+                continue
 
+            ar = re.match("!armor", msg)
+            if ar:
+                give(g[0],"diamond helmet")
+                give(g[0],"diamond chestplate")
+                give(g[0],"diamond legging")
+                give(g[0],"diamond boots")
+            """#"""
+            
             toIRC("{C2}"+g[0][:-1]+"_:{} "+msg,toAdullam)
             continue
         

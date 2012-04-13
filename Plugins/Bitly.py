@@ -20,15 +20,18 @@ def on_PRIVMSG(bot, sender, args):
     PREFIX = '!'
     nick, channel, args = sender.split('!', 1)[0], args[0], args[1]
 
+    cmd = None
     url_re = re.compile('(https?://[^\s]*)')
     res = url_re.search(args)
+    curUrl = ""
     if res:
         url = res.groups()[0]
+        curUrl = url
     else:
-        return 
-
-
-    if len(url)>AUTOLEN or cmd in ['!bb','!bitly', '!short']:
+        cmd = args.split(" ")[0]
+        curUrl = ""
+    
+    if len(curUrl)>AUTOLEN or cmd in ['!bb','!bitly', '!short']:
         try: 
             cmd, msg = args.split(' ', 1)
         except ValueError:

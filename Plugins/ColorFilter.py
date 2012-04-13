@@ -22,12 +22,12 @@ def on_unload(bot):
 
 def on_load(bot):
     bot.oldSay=bot.say
-    nsay=lambda chan,msg,len=None:bot.oldSay(chan,colorFilter(msg),len)
+    nsay=lambda chan,msg,l=None:bot.oldSay(chan,colorFilter(msg))
     setattr(bot,"say",nsay)
     bot.nickColor = nickColor
     #print "bot.msg:",bot.msg 
     bot.oldMsg=bot.msg
-    nmsg=lambda user,message,len=None:bot.oldMsg(user,colorFilter(message),len)
+    nmsg=lambda user,message,l=None:bot.oldMsg(user,colorFilter(message))
     setattr(bot,"msg",nmsg)
 
 def target(bot,sender,room):
@@ -57,3 +57,21 @@ def on_PRIVMSG(bot,sender,args):
         for c in msg:
             out += "{C"+str(random.randint(2,13))+"}"+c
         bot.msg(to,out)
+    if args[1].startswith("!colorize "):
+        colors = [4,7,3,10,6]
+        clen = len(colors)
+        msg = args[1].split(" ",1)[1]
+        level = 0
+        color = "{C%i}"
+        out = color%0
+        for i in msg:
+            if i=="(":
+                level = (1+level)%clen
+                out += color%colors[level]+"("
+            elif i==")":
+                level = (clen+level-1)%clen
+                out += ")"+color%colors[level]
+            else:
+                out += i
+        bot.msg(to,out)
+        
