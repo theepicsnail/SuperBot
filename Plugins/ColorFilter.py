@@ -57,21 +57,36 @@ def on_PRIVMSG(bot,sender,args):
         for c in msg:
             out += "{C"+str(random.randint(2,13))+"}"+c
         bot.msg(to,out)
+
     if args[1].startswith("!colorize "):
-        colors = [4,7,3,10,6]
+        colors = [0,4,7,3,10,6]
         clen = len(colors)
         msg = args[1].split(" ",1)[1]
+        start_brc = "("
+        end_brc = ")"
         level = 0
         color = "{C%i}"
         out = color%0
+
         for i in msg:
-            if i=="(":
+            if i == start_brc:
+                out += "("
+                msg.index(i) + 1
                 level = (1+level)%clen
-                out += color%colors[level]+"("
-            elif i==")":
+                out += color%colors[level]
+            elif i == ",":
+                 level = (clen+level-1)%clen
+                 out += color%colors[level] + ","
+                 level = (1+level)%clen
+                 out += color%colors[level]  
+            elif i == end_brc:
+                msg.index(i) - 1
                 level = (clen+level-1)%clen
-                out += ")"+color%colors[level]
+                out += color%colors[level] + ")"
             else:
                 out += i
         bot.msg(to,out)
-        
+
+"""
+Can make colorize more efficient by modularizing repetitive statements
+"""
