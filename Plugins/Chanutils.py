@@ -41,9 +41,6 @@ def on_INVITE(bot,sender,msg):
     bot.join(msg[1])
 def on_PRIVMSG(bot,sender,msg):
     parts = msg[1].split() #["!ping","google.com","&&","rm","-rf"]
-    if msg[1]=="!date":
-        from time import strftime
-        bot.say(msg[0],strftime("%D %T"))
     if parts[0]=="!ping" and len(parts)==2:
         print "Pinging:",parts[1],msg[0]
         bot.say(msg[0],"Pinging "+parts[1])
