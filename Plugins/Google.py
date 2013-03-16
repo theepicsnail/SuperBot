@@ -58,6 +58,7 @@ def google_define(params, num=None):
         @params (dict) contains query value.
     """
     try:
+        #import pdb; pdb.set_trace()
         url = GOOGLE_SEARCH_URL + urllib.urlencode(params)
         response = _buildResponse(url)
         html = response.read()
@@ -174,25 +175,6 @@ def on_PRIVMSG(bot, sender, args):
             if cmd in ["!gs", "!gsearch"]:
                 query = {'q': msg}
                 bot.say(channel, google_search(query))
-            if cmd in ["!gw", "!gweather", "!weather"]:
-                query = {'weather': msg, 'hl': 'en'}
-                bot.say(channel, google_weather(query))
-            if cmd in ["!gf", "!forecast"]:
-                bot.say(channel, google_forecast({'weather':msg}))
-            if cmd in ["!gc", "!gcalc"]:
-                query = {'q': msg}
-                bot.say(channel, google_calc(query))
-            if cmd in ["!gd", "!gdefine"]:
-                query = {'q': 'define:'+msg}
-                msgparts = msg.split()
-                num = 0
-                try:
-                    if int(msgparts[-1]):
-                        num = int(msgparts.pop())
-                    query = {'q': 'define:'+' '.join(msgparts)}
-                except:
-                    pass
-                bot.say(channel, google_define(query, num=num))
             if cmd in ["!gp", "!gspell"]:
                 query = {'q': msg}
                 bot.say(channel, google_spell(query))
