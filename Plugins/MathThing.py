@@ -8,7 +8,7 @@ import StringIO
 #Debugging Decorators {{{
 depth = 1 
 def tokenizeDebug(func):
-    return func
+#    return func
     def nfunc(self,tokens):
         global depth
         print tokens,
@@ -32,7 +32,7 @@ def tokenizeDebug(func):
     return nfunc
 
 def evalDebug(func):
-    return func
+#    return func
     def nfunc(self,scope):
         global depth
 
@@ -340,24 +340,25 @@ class IfExpression(ExpressionNode):#{{{
         self.falseCase = None
     @tokenizeDebug
     def parse(self,tokens):
+        nextExpr = ComparisonExpression
         tokens.pushState()
         if tokens.get().tval != 'if':
-            return AdditiveExpression().parse(tokens.popState())
+            return nextExpr().parse(tokens.popState())
 
         if tokens.get().tval != '(':
             raise ParseException("Expected '(' after if")
 
-        self.condition = AdditiveExpression().parse(tokens)
+        self.condition = nextExpr().parse(tokens)
 
         if tokens.get().tval!= ')':
             raise ParseException("Expected ')' ")
         
-        self.trueCase = AdditiveExpression().parse(tokens)
+        self.trueCase = nextExpr().parse(tokens)
 
         tokens.discardState()
         
         if tokens.get().tval == 'else':
-            self.falseCase = AdditiveExpression().parse(tokens)
+            self.falseCase = nextExpr().parse(tokens)
         else:
             tokens.unget()
 
@@ -377,6 +378,60 @@ class IfExpression(ExpressionNode):#{{{
         return "if({}) {} else {}".format(self.condition,self.trueCase,self.falseCase)
 #}}}
 
+#}}}
+class ComparisonExpression(ExpressionNode):#{{{
+    def __init__(self):
+        self.terms = []
+        self.opDict = {
+            "<":lambda x,y:x<y,
+            "<=":lambda x,y:x<=y,
+            ">":lambda x,y:x>y,
+            ">=":lambda x,y:x>=y
+        }
+        pass
+
+    @tokenizeDebug
+    def parse(self,tokens):
+        term = AdditiveExpression().parse(tokens)
+        if term is None:
+            raise ParseException("Expected additive expression")
+        self.terms.append(term)
+        op = tokens.get()
+        while op.tval in self.opDict.keys():
+            self.terms.append(op.tval)
+            term = AdditiveExpression().parse(tokens)
+            if term is None:
+                raise ParseExpression("Expected additive expression")
+            self.terms.append(term)
+            op = tokens.get()
+        tokens.unget()
+
+        if len(self.terms) == 1:
+            return self.terms[0]
+        return self
+
+    @evalDebug
+    def evaluate(self,scope):
+        left = self.terms[0].evaluate(scope)
+        right = self.terms[2].evaluate(scope)
+        op = self.terms[1]
+        out = self.performOp(left,op,right)
+        nextVal = 4
+        while out and nextVal<len(self.terms):
+            left = right
+            op = self.terms[nextVal-1]
+            right = self.terms[nextVal].evaluate(scope)
+            nextVal += 2
+            out = self.performOp(left,op,right)
+        if out:
+            return 1
+        return 0
+    def performOp(self, left, op, right):
+        return self.opDict[op](left,right)
+    def __str__(self):
+        return "("+"".join(map(str,self.terms))+")"
+        
+#}}}
 
 class AdditiveExpression(ExpressionNode):#{{{
     def __init__(self):
@@ -731,6 +786,7 @@ def on_PRIVMSG(bot,sender,args):
     response = ""
     try:
         resp = Expression().parse(Tokenizer(line[1:])).evaluate(scope)
+        scope['_'] = resp
         response = (sender.split("!")[0]+": {!s}").format(clean(resp))
     except Exception as e:
         try:
